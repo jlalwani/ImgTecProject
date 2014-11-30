@@ -20,13 +20,13 @@ import com.example.artistinformation.structures.Utils;
 public class DownloadJsonAsyncTask extends AsyncTask<Void, String, JSONObject> {
 
 	private Context context;
-	private ListView artistDetailsListView;
+	private ListView listView;
 	private Button retryButton;
 
-	public DownloadJsonAsyncTask(Context context,
-			ListView artistDetailsListView, Button retryButton) {
+	public DownloadJsonAsyncTask(Context context, ListView listView,
+			Button retryButton) {
 		this.context = context;
-		this.artistDetailsListView = artistDetailsListView;
+		this.listView = listView;
 		this.retryButton = retryButton;
 	}
 
@@ -47,15 +47,15 @@ public class DownloadJsonAsyncTask extends AsyncTask<Void, String, JSONObject> {
 	protected void onPostExecute(JSONObject jsonObject) {
 
 		if (jsonObject != null) {
-			ArrayList<ArtistBean> artistBeans = Utils
-					.returnArtistBeans(jsonObject);
+			Utils.saveJSONObject(jsonObject);
+			ArrayList<ArtistBean> artistBeans = Utils.returnArtistBeans();
 			ArtistAdapter artistAdapter = new ArtistAdapter(context,
 					R.layout.artist_item_view, artistBeans);
-			artistDetailsListView.setAdapter(artistAdapter);
-			artistDetailsListView.setVisibility(View.VISIBLE);
+			listView.setAdapter(artistAdapter);
+			listView.setVisibility(View.VISIBLE);
 			retryButton.setVisibility(View.GONE);
 		} else {
-			artistDetailsListView.setVisibility(View.GONE);
+			listView.setVisibility(View.GONE);
 			retryButton.setVisibility(View.VISIBLE);
 			Toast.makeText(context,
 					context.getResources().getString(R.string.json_error),

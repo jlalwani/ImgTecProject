@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -14,6 +15,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.artistinformation.AlbumListActivity;
 import com.example.artistinformation.R;
 import com.example.artistinformation.structures.ArtistBean;
 import com.example.artistinformation.structures.ImageLoader;
@@ -21,24 +23,16 @@ import com.example.artistinformation.structures.ImageLoader;
 public class ArtistAdapter extends ArrayAdapter<ArtistBean> {
 
 	private Context context;
-	private ArrayList<ArtistBean> ArtistBeans;
+	private ArrayList<ArtistBean> artistBeans;
 	public ImageLoader imageLoader;
 
 	public ArtistAdapter(Context context, int resource,
-			ArrayList<ArtistBean> ArtistBeans) {
-		super(context, resource, ArtistBeans);
+			ArrayList<ArtistBean> artistBeans) {
+		super(context, resource, artistBeans);
 		// TODO Auto-generated constructor stub
 		this.context = context;
-		this.ArtistBeans = ArtistBeans;
+		this.artistBeans = artistBeans;
 		imageLoader = new ImageLoader(context);
-	}
-
-	public int getCount() {
-		return ArtistBeans.size();
-	}
-
-	public void updateArtistBeans(ArrayList<ArtistBean> ArtistBeans) {
-		this.ArtistBeans = ArtistBeans;
 	}
 
 	static class ViewHolder {
@@ -84,15 +78,15 @@ public class ArtistAdapter extends ArrayAdapter<ArtistBean> {
 		Animation animation = AnimationUtils.loadAnimation(context,
 				android.R.anim.fade_in);
 		viewHolder.artistPictureImageView.startAnimation(animation);
-		viewHolder.artistNameTextView.setText(ArtistBeans.get(position)
+		viewHolder.artistNameTextView.setText(artistBeans.get(position)
 				.getName());
-		viewHolder.artistDescriptionTextView.setText(ArtistBeans.get(position)
+		viewHolder.artistDescriptionTextView.setText(artistBeans.get(position)
 				.getDescription());
-		viewHolder.artistGenreTextView.setText("Genre: "+ArtistBeans.get(position)
-				.getGenres());
+		viewHolder.artistGenreTextView.setText("Genre: "
+				+ artistBeans.get(position).getGenres());
 
 		// DisplayImage function from ImageLoader Class
-		imageLoader.DisplayImage(ArtistBeans.get(position).getPicture(),
+		imageLoader.DisplayImage(artistBeans.get(position).getPicture(),
 				viewHolder.artistPictureImageView);
 		convertView.setOnClickListener(new OnItemClickListener(position));
 
@@ -108,22 +102,9 @@ public class ArtistAdapter extends ArrayAdapter<ArtistBean> {
 
 		@Override
 		public void onClick(View arg0) {
-			// Intent localIntent1 = new Intent(context, ReviewActivity.class);
-			// localIntent1.putExtra("number", ArtistBeans.get(position)
-			// .getNumber());
-			// localIntent1.putExtra("title",
-			// ArtistBeans.get(position).getName());
-			// localIntent1.putExtra("channel", ArtistBeans.get(position)
-			// .getChannel());
-			// localIntent1.putExtra("releaseDate", ArtistBeans.get(position)
-			// .getReleaseDate());
-			//
-			// context.startActivity(localIntent1);
-			// Activity activity = (Activity) context;
-			// if (activity != null) {
-			// activity.overridePendingTransition(R.anim.slide_in_left,
-			// R.anim.slide_out_left);
-			// }
+			Intent intent = new Intent(context, AlbumListActivity.class);
+			intent.putExtra("artistId", artistBeans.get(position).getId());
+			context.startActivity(intent);
 		}
 	}
 }

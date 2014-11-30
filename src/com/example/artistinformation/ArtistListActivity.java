@@ -18,7 +18,7 @@ public class ArtistListActivity extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_main);
+		setContentView(R.layout.artist_activity);
 
 		retryButton = (Button) findViewById(R.id.retryButton);
 
@@ -40,13 +40,13 @@ public class ArtistListActivity extends Activity {
 		ListView artistDetailsListView = (ListView) findViewById(android.R.id.list);
 
 		if (Utils.internetConnectionAvailable(this)) {
-			new DownloadJsonAsyncTask(this, artistDetailsListView, retryButton)
-					.execute();
-			
+			new DownloadJsonAsyncTask(this, artistDetailsListView, retryButton).execute();
+
 		} else {
 			artistDetailsListView.setVisibility(View.GONE);
 			retryButton.setVisibility(View.VISIBLE);
-			Toast.makeText(this, getResources().getString(R.string.internet_error),
+			Toast.makeText(this,
+					getResources().getString(R.string.internet_error),
 					Toast.LENGTH_LONG).show();
 		}
 	}

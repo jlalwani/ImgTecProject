@@ -22,6 +22,12 @@ public class Utils {
 	public static String TAG_GENRES = "genres";
 	public static String TAG_PICTURE = "picture";
 
+	public static String TAG_ALBUMS = "albums";
+	public static String TAG_ARTIST_ID = "artistId";
+	public static String TAG_TITLE = "title";
+	public static String TAG_TYPE = "type";
+	public static JSONObject jsonObject;
+
 	public static boolean internetConnectionAvailable(Context context) {
 		ConnectivityManager connectivity = (ConnectivityManager) context
 				.getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -56,7 +62,7 @@ public class Utils {
 		}
 	}
 
-	public static ArrayList<ArtistBean> returnArtistBeans(JSONObject jsonObject) {
+	public static ArrayList<ArtistBean> returnArtistBeans() {
 		ArrayList<ArtistBean> artistBeans = new ArrayList<ArtistBean>();
 		try {
 			JSONArray artistsJsonArray = jsonObject.getJSONArray(TAG_ARTISTS);
@@ -77,5 +83,35 @@ public class Utils {
 			e.printStackTrace();
 		}
 		return artistBeans;
+	}
+
+	public static void saveJSONObject(JSONObject resultJsonObject) {
+		jsonObject = resultJsonObject;
+	}
+
+	public static ArrayList<AlbumBean> returnAlbumBeans(String artistId) {
+		ArrayList<AlbumBean> albumBeans = new ArrayList<AlbumBean>();
+		try {
+			JSONArray artistsJsonArray = jsonObject.getJSONArray(TAG_ALBUMS);
+			for (int i = 0; i < artistsJsonArray.length(); i++) {
+				JSONObject artistJsonObject = artistsJsonArray.getJSONObject(i);
+				if (artistJsonObject.getString(TAG_ARTIST_ID).equals(artistId)) {
+					AlbumBean albumBean = new AlbumBean();
+					albumBean.setId(artistJsonObject.getString(TAG_ID));
+					albumBean.setArtistId(artistJsonObject
+							.getString(TAG_ARTIST_ID));
+					albumBean.setTitle(artistJsonObject.getString(TAG_TITLE));
+					albumBean.setType(artistJsonObject.getString(TAG_TYPE));
+					albumBean.setPicture(artistJsonObject
+							.getString(TAG_PICTURE));
+					albumBeans.add(albumBean);
+				}
+
+			}
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return albumBeans;
 	}
 }
