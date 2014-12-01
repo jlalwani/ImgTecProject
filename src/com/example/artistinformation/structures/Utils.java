@@ -1,5 +1,9 @@
 package com.example.artistinformation.structures;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
@@ -9,6 +13,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
@@ -113,5 +119,48 @@ public class Utils {
 			e.printStackTrace();
 		}
 		return albumBeans;
+	}
+
+	// Decodes image and scales it to reduce memory consumption
+	public static Bitmap decodeFile(File f) {
+
+		try {
+
+			// Decode image size
+			BitmapFactory.Options o = new BitmapFactory.Options();
+			o.inJustDecodeBounds = true;
+			FileInputStream stream1 = new FileInputStream(f);
+			BitmapFactory.decodeStream(stream1, null, o);
+			stream1.close();
+
+			// Find the correct scale value. It should be the power of 2.
+
+			// Set width/height of recreated image
+			final int REQUIRED_SIZE = 85;
+
+			int width_tmp = o.outWidth, height_tmp = o.outHeight;
+			int scale = 1;
+			while (true) {
+				if (width_tmp / 2 < REQUIRED_SIZE
+						|| height_tmp / 2 < REQUIRED_SIZE)
+					break;
+				width_tmp /= 2;
+				height_tmp /= 2;
+				scale *= 2;
+			}
+
+			// decode with current scale values
+			BitmapFactory.Options o2 = new BitmapFactory.Options();
+			o2.inSampleSize = scale;
+			FileInputStream stream2 = new FileInputStream(f);
+			Bitmap bitmap = BitmapFactory.decodeStream(stream2, null, o2);
+			stream2.close();
+			return bitmap;
+
+		} catch (FileNotFoundException e) {
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 }

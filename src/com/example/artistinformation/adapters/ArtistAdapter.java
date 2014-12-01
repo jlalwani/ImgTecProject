@@ -15,7 +15,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.artistinformation.AlbumListActivity;
+import com.example.artistinformation.AlbumActivity;
 import com.example.artistinformation.R;
 import com.example.artistinformation.structures.ArtistBean;
 import com.example.artistinformation.structures.ImageLoader;
@@ -102,8 +102,14 @@ public class ArtistAdapter extends ArrayAdapter<ArtistBean> {
 
 		@Override
 		public void onClick(View arg0) {
-			Intent intent = new Intent(context, AlbumListActivity.class);
+			Intent intent = new Intent(context, AlbumActivity.class);
 			intent.putExtra("artistId", artistBeans.get(position).getId());
+			intent.putExtra("name", artistBeans.get(position).getName());
+			intent.putExtra("description", artistBeans.get(position)
+					.getDescription());
+			intent.putExtra("genres", artistBeans.get(position).getGenres());
+			intent.putExtra("picture", artistBeans.get(position).getPicture());
+
 			context.startActivity(intent);
 		}
 	}

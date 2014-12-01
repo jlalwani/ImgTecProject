@@ -9,6 +9,7 @@ import android.os.AsyncTask;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.example.artistinformation.R;
@@ -22,12 +23,14 @@ public class DownloadJsonAsyncTask extends AsyncTask<Void, String, JSONObject> {
 	private Context context;
 	private ListView listView;
 	private Button retryButton;
+	private ProgressBar progressBar;
 
 	public DownloadJsonAsyncTask(Context context, ListView listView,
-			Button retryButton) {
+			Button retryButton, ProgressBar progressBar) {
 		this.context = context;
 		this.listView = listView;
 		this.retryButton = retryButton;
+		this.progressBar = progressBar;
 	}
 
 	@Override
@@ -54,9 +57,11 @@ public class DownloadJsonAsyncTask extends AsyncTask<Void, String, JSONObject> {
 			listView.setAdapter(artistAdapter);
 			listView.setVisibility(View.VISIBLE);
 			retryButton.setVisibility(View.GONE);
+			progressBar.setVisibility(View.GONE);
 		} else {
 			listView.setVisibility(View.GONE);
 			retryButton.setVisibility(View.VISIBLE);
+			progressBar.setVisibility(View.GONE);
 			Toast.makeText(context,
 					context.getResources().getString(R.string.json_error),
 					Toast.LENGTH_LONG).show();

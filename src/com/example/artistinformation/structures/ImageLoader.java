@@ -137,7 +137,7 @@ public class ImageLoader {
 
 		// from SD cache
 		// CHECK : if trying to decode file which not exist in cache return null
-		Bitmap b = decodeFile(f);
+		Bitmap b = Utils.decodeFile(f);
 		if (b != null)
 			return b;
 
@@ -167,7 +167,7 @@ public class ImageLoader {
 
 			// Now file created and going to resize file with defined height
 			// Decodes image and scales it to reduce memory consumption
-			bitmap = decodeFile(f);
+			bitmap = Utils.decodeFile(f);
 
 			return bitmap;
 
@@ -179,48 +179,7 @@ public class ImageLoader {
 		}
 	}
 
-	// Decodes image and scales it to reduce memory consumption
-	private Bitmap decodeFile(File f) {
-
-		try {
-
-			// Decode image size
-			BitmapFactory.Options o = new BitmapFactory.Options();
-			o.inJustDecodeBounds = true;
-			FileInputStream stream1 = new FileInputStream(f);
-			BitmapFactory.decodeStream(stream1, null, o);
-			stream1.close();
-
-			// Find the correct scale value. It should be the power of 2.
-
-			// Set width/height of recreated image
-			final int REQUIRED_SIZE = 85;
-
-			int width_tmp = o.outWidth, height_tmp = o.outHeight;
-			int scale = 1;
-			while (true) {
-				if (width_tmp / 2 < REQUIRED_SIZE
-						|| height_tmp / 2 < REQUIRED_SIZE)
-					break;
-				width_tmp /= 2;
-				height_tmp /= 2;
-				scale *= 2;
-			}
-
-			// decode with current scale values
-			BitmapFactory.Options o2 = new BitmapFactory.Options();
-			o2.inSampleSize = scale;
-			FileInputStream stream2 = new FileInputStream(f);
-			Bitmap bitmap = BitmapFactory.decodeStream(stream2, null, o2);
-			stream2.close();
-			return bitmap;
-
-		} catch (FileNotFoundException e) {
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		return null;
-	}
+	
 
 	boolean imageViewReused(PhotoToLoad photoToLoad) {
 
